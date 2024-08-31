@@ -49,9 +49,9 @@ MicroGenixTrain is used to fit models to predict gene expression with elastic ne
 }
 \examples{
 \dontrun{
-input_taxa <- system.file('extdata', 'example_taxon_abundance.csv', package="MicroGenix")
-input_geno <- system.file('extdata','example_genotype_dosage.csv', package="MicroGenix")
-input_expr <- system.file('extdata', 'example_gene_expression.csv', package="MicroGenix")
+input_taxa <- 'extdata/example_taxon_abundance.csv'
+input_geno <- 'extdata/example_genotype_dosage.csv'
+input_expr <- 'extdata/example_gene_expression.csv'
 fit_data <- MicroGenixTrain(input_taxa, input_geno, input_expr)
 }
 }

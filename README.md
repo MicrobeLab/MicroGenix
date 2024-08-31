@@ -6,20 +6,20 @@ MicroGenix integrates multi-omics data to identify the genotype-microbiome inter
 
 The MicroGenix R package is easily installed from the GitHub repository:
 
-    library(devtools) 
+    install.packages("devtools") 
     devtools::install_github("MicrobeLab/MicroGenix")
 
 ## Manual
 
-The MicroGenix R package includes three main functions. Detailed documentation is available through the R help interface (`?MicroGenixTrain`, `?MicroGenixPredict`, `?MicroGenixAssociation`). Demo input files for running examples below are available in `extdata`.
+The MicroGenix R package includes three main functions. Detailed documentation is available through the R help interface (`?MicroGenixTrain`, `?MicroGenixPredict`, `?MicroGenixAssociation`). Demo input files for running examples below are available in the `extdata` folder.
 
 ### MicroGenixTrain
 
 `MicroGenixTrain` is used to fit models to predict gene expression with elastic net. Predictors include SNPs, microbes, and SNP-microbe interactions.
 
-    input_taxa <- system.file('extdata','example_taxon_abundance.csv', package="MicroGenix")
-    input_geno <- system.file('extdata','example_genotype_dosage.csv', package="MicroGenix")
-    input_expr <- system.file('extdata','example_gene_expression.csv', package="MicroGenix")
+    input_taxa <- 'extdata/example_taxon_abundance.csv'
+    input_geno <- 'extdata/example_genotype_dosage.csv'
+    input_expr <- 'extdata/example_gene_expression.csv'
     fit_data <- MicroGenixTrain(input_taxa, input_geno, input_expr, output_prefix = 'example_output_model')
 
 `input_taxa` and `input_geno` are comma-separated table files in shape [number_of_samples, number_of_taxa] and [number_of_samples, number_of_SNPs], respectively. `input_expr` is a file in shape [number_of_samples,] with the expression levels of a single gene.
@@ -28,8 +28,8 @@ The MicroGenix R package includes three main functions. Detailed documentation i
 
 `MicroGenixPredict` predicts gene expression using models trained with `MicroGenixTrain`.
 
-    input_taxa <- system.file('extdata','example_taxon_abundance.csv', package="MicroGenix")
-    input_geno <- system.file('extdata','example_genotype_dosage.csv', package="MicroGenix")
+    input_taxa <- 'extdata/example_taxon_abundance.csv'
+    input_geno <- 'extdata/example_genotype_dosage.csv'
     model <- 'example_output_model.rds'
     predicted_data <- MicroGenixPredict(model, input_taxa, input_geno)
 
@@ -40,7 +40,7 @@ The MicroGenix R package includes three main functions. Detailed documentation i
 `MicroGenixAssociation` performs association tests between phenotype and gene expression levels predicted using `MicroGenixPredict`.
 
     pred_expr <- predicted_data$predicted_expr
-    metadata <- system.file('extdata','example_metadata.csv', package="MicroGenix")
+    metadata <- 'extdata/example_metadata.csv'
     assoc_result <- MicroGenixAssociation(pred_expr, metadata, pheno = 'pheno')
 
 `metadata` is a comma-separated file with phenotype and covariates.

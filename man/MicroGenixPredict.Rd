@@ -40,8 +40,8 @@ MicroGenixPredict predicts gene expression using models trained with MicroGenixT
 }
 \examples{
 \dontrun{
-input_taxa <- system.file('extdata', 'example_taxon_abundance.csv', package="MicroGenix")
-input_geno <- system.file('extdata', 'example_genotype_dosage.csv', package="MicroGenix")
+input_taxa <- 'extdata/example_taxon_abundance.csv'
+input_geno <- 'extdata/example_genotype_dosage.csv'
 model <- 'example_output_model.rds'
 predicted_data <- MicroGenixPredict(model, input_taxa, input_geno)
 }
