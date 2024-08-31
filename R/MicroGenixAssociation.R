@@ -19,13 +19,17 @@
 #'
 #' @examples
 #' \dontrun{
-#' input_taxa <- system.file('extdata','example_taxon_abundance.csv', package="MicroGenix")
-#' input_geno <- system.file('extdata','example_genotype_dosage.csv', package="MicroGenix")
-#' model <- system.file('extdata','example_output_model.rds', package="MicroGenix")
+#' input_taxa <- system.file('extdata',
+#'     'example_taxon_abundance.csv', package="MicroGenix")
+#' input_geno <- system.file('extdata',
+#'     'example_genotype_dosage.csv', package="MicroGenix")
+#' model <- 'example_output_model.rds'
 #' predicted_data <- MicroGenixPredict(model, input_taxa, input_geno)
 #' pred_expr <- predicted_data$predicted_expr
-#' metadata <- system.file('extdata','example_metadata.csv', package="MicroGenix")
-#' assoc_result <- MicroGenixAssociation(pred_expr, metadata, pheno = 'pheno', fixed_effect = 'cov_1')
+#' metadata <- system.file('extdata',
+#'     'example_metadata.csv', package="MicroGenix")
+#' assoc_result <- MicroGenixAssociation(pred_expr, metadata,
+#'     pheno = 'pheno', fixed_effect = 'cov_1')
 #' }
 MicroGenixAssociation <- function(pred_expr, metadata, pheno_type = 'binary', model = NULL,
                                   pheno = NULL, fixed_effect = NULL, random_effect = NULL,

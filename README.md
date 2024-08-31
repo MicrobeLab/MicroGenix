@@ -20,7 +20,7 @@ The MicroGenix R package includes three main functions. Detailed documentation i
     input_taxa <- system.file('extdata','example_taxon_abundance.csv', package="MicroGenix")
     input_geno <- system.file('extdata','example_genotype_dosage.csv', package="MicroGenix")
     input_expr <- system.file('extdata','example_gene_expression.csv', package="MicroGenix")
-    fit_data <- MicroGenixTrain(input_taxa, input_geno, input_expr, output_prefix = 'demo_output')
+    fit_data <- MicroGenixTrain(input_taxa, input_geno, input_expr, output_prefix = 'example_output_model')
 
 `input_taxa` and `input_geno` are comma-separated table files in shape [number_of_samples, number_of_taxa] and [number_of_samples, number_of_SNPs], respectively. `input_expr` is a file in shape [number_of_samples,] with the expression levels of a single gene.
 
@@ -30,7 +30,7 @@ The MicroGenix R package includes three main functions. Detailed documentation i
 
     input_taxa <- system.file('extdata','example_taxon_abundance.csv', package="MicroGenix")
     input_geno <- system.file('extdata','example_genotype_dosage.csv', package="MicroGenix")
-    model <- system.file('extdata','example_output_model.rds', package="MicroGenix")
+    model <- 'example_output_model.rds'
     predicted_data <- MicroGenixPredict(model, input_taxa, input_geno)
 
 `input_taxa` and `input_geno` are in the same format as the input files for `MicroGenixTrain`. `model` is a model file generated using `MicroGenixTrain`.
