@@ -1,0 +1,18 @@
+Package: MicroGenix
+Title: Identification of the Genotype-microbiome Interactions Shaping the Transcriptome
+Version: 0.1.0
+Authors@R: 
+    person(given = "Qiaoxing",
+           family = "Liang",
+           role = c("aut", "cre"),
+           email = "liangqiaoxing@fudan.edu.cn",
+           comment = c(ORCID = "0000-0002-2876-3013"))
+Description: MicroGenix screens for the genotype-microbiome interactions by integrating host genome, transcriptome, and microbiome data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+    glmnet,
+    dplyr
