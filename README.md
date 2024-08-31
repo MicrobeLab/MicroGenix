@@ -6,10 +6,8 @@ MicroGenix integrates multi-omics data to identify the genotype-microbiome inter
 
 The MicroGenix R package is easily installed from the GitHub repository:
 
-``` bash
-library(devtools) 
-devtools::install_github("MicrobeLab/MicroGenix")
-```
+    library(devtools) 
+    devtools::install_github("MicrobeLab/MicroGenix")
 
 ## Manual
 
