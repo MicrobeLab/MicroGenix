@@ -15,4 +15,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
     glmnet,
-    dplyr
+    dplyr,
+    stats,
+    utils
+Suggests: 
+    testthat

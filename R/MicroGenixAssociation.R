@@ -16,25 +16,28 @@
 #' @export
 #'
 #' @importFrom glmnet coef.glmnet
+#' @importFrom stats as.formula
+#' @importFrom stats binomial
+#' @importFrom stats glm
+#' @importFrom stats lm
+#' @importFrom stats predict
+#' @importFrom utils read.csv
+#' @importFrom utils write.table
 #'
 #' @examples
 #' \dontrun{
-#' input_taxa <- system.file('extdata',
-#'     'example_taxon_abundance.csv', package="MicroGenix")
-#' input_geno <- system.file('extdata',
-#'     'example_genotype_dosage.csv', package="MicroGenix")
+#' input_taxa <- system.file('extdata', 'example_taxon_abundance.csv', package="MicroGenix")
+#' input_geno <- system.file('extdata', 'example_genotype_dosage.csv', package="MicroGenix")
 #' model <- 'example_output_model.rds'
 #' predicted_data <- MicroGenixPredict(model, input_taxa, input_geno)
 #' pred_expr <- predicted_data$predicted_expr
-#' metadata <- system.file('extdata',
-#'     'example_metadata.csv', package="MicroGenix")
-#' assoc_result <- MicroGenixAssociation(pred_expr, metadata,
-#'     pheno = 'pheno', fixed_effect = 'cov_1')
+#' metadata <- system.file('extdata', 'example_metadata.csv', package="MicroGenix")
+#' assoc_result <- MicroGenixAssociation(pred_expr, metadata, pheno = 'pheno', fixed_effect = 'cov_1')
 #' }
 MicroGenixAssociation <- function(pred_expr, metadata, pheno_type = 'binary', model = NULL,
                                   pheno = NULL, fixed_effect = NULL, random_effect = NULL,
                                   sig_thres = 0.05){
-  metadata <- read.csv(metadata, check.names = F, row.names = 1)
+  metadata <- utils::read.csv(metadata, check.names = F, row.names = 1)
   if(! pheno_type %in% c('binary', 'quant')){
     stop('pheno_type should be: binary/quant')
   }
@@ -55,13 +58,13 @@ MicroGenixAssociation <- function(pred_expr, metadata, pheno_type = 'binary', mo
   if(!is.null(random_effect)){
     fmla <- paste(fmla, '+', '(1 |', random_effect, ')')
   }
-  fmla <- as.formula(fmla)
+  fmla <- stats::as.formula(fmla)
   if(pheno_type == 'binary'){
-    assoc <- summary(glm(fmla, data = metadata, family = binomial))
+    assoc <- summary(stats::glm(fmla, data = metadata, family = binomial))
     beta <- assoc$coefficients['expr', 'Estimate']
     pval <- assoc$coefficients['expr', 'Pr(>|z|)']
   } else {
-    assoc <- summary(lm(fmla, data = metadata))
+    assoc <- summary(stats::lm(fmla, data = metadata))
     beta <- assoc$coefficients['expr', 'Estimate']
     pval <- assoc$coefficients['expr', 'Pr(>|t|)']
   }

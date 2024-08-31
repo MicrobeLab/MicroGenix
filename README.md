@@ -48,3 +48,5 @@ The MicroGenix R package includes three main functions. Detailed documentation i
 ## Other Resources
 
 Bugs and difficulties in using MicroGenix are welcome on [the issue tracker](https://github.com/MicrobeLab/MicroGenix/issues).
+
+The MicroGenix method is described in "Multi-omics integration unravels genotype-microbiome interactions shaping the conjunctival transcriptome". Models trained using the conjunctival multi-omics data are available [here](https://drive.google.com/file/d/1kS_3GkNiEIoaGfC72E0o7mQTUCHsmN_p/view?usp=drive_link).

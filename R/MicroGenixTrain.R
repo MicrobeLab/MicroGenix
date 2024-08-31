@@ -21,29 +21,32 @@
 #' @importFrom glmnet cv.glmnet
 #' @importFrom glmnet coef.glmnet
 #' @importFrom dplyr left_join
+#' @importFrom stats as.formula
+#' @importFrom stats binomial
+#' @importFrom stats glm
+#' @importFrom stats lm
+#' @importFrom stats predict
+#' @importFrom utils read.csv
+#' @importFrom utils write.table
 #'
 #' @examples
 #' \dontrun{
-#' input_taxa <- system.file('extdata',
-#'     'example_taxon_abundance.csv', package="MicroGenix")
-#' input_geno <- system.file('extdata',
-#'     'example_genotype_dosage.csv', package="MicroGenix")
-#' input_expr <- system.file('extdata',
-#'     'example_gene_expression.csv', package="MicroGenix")
-#' fit_data <- MicroGenixTrain(input_taxa, input_geno, input_expr,
-#'     output_prefix = 'example_output_model')
+#' input_taxa <- system.file('extdata', 'example_taxon_abundance.csv', package="MicroGenix")
+#' input_geno <- system.file('extdata','example_genotype_dosage.csv', package="MicroGenix")
+#' input_expr <- system.file('extdata', 'example_gene_expression.csv', package="MicroGenix")
+#' fit_data <- MicroGenixTrain(input_taxa, input_geno, input_expr)
 #' }
 MicroGenixTrain <- function(input_taxa, input_geno, input_expr,
                             log_trans_taxa = TRUE, log_trans_taxa_add = 0.01,
                             log_trans_gene = FALSE, log_trans_gene_add = 0.01,
                             fold_id = NULL, num_folds = 10, output_prefix = NULL,
                             pval_fit = FALSE){
-  taxa <- read.csv(input_taxa, check.names = F, row.names = 1)
+  taxa <- utils::read.csv(input_taxa, check.names = F, row.names = 1)
   if(log_trans_taxa){
     taxa <- log2(taxa + log_trans_taxa_add)
   }
-  geno <- read.csv(input_geno, check.names = F, row.names = 1)
-  expr <- read.csv(input_expr, check.names = F, row.names = 1)
+  geno <- utils::read.csv(input_geno, check.names = F, row.names = 1)
+  expr <- utils::read.csv(input_expr, check.names = F, row.names = 1)
   if(log_trans_gene){
     expr <- log2(expr + log_trans_gene_add)
   }
@@ -96,21 +99,20 @@ MicroGenixTrain <- function(input_taxa, input_geno, input_expr,
     }
     df_coef <- as.matrix(glmnet::coef.glmnet(fit, s="lambda.min"))
     df_coef <- data.frame(feature = rownames(df_coef), coefficient = df_coef[,1])
-    df_coef <- subset(df_coef, coefficient != 0)
-    df_coef <- subset(df_coef, feature != '(Intercept)')
+    df_coef <- df_coef[df_coef[,1] != '(Intercept)' & df_coef[,2] != 0,]
     rownames(df_coef) <- NULL
     if(pval_fit){
       x_lm <- x[,colnames(x) %in% df_coef$feature]
       train_data <- as.data.frame(x_lm)
       train_data$express <- y
-      fit_lm <- lm(express ~ ., data = train_data)
+      fit_lm <- stats::lm(express ~ ., data = train_data)
       fit_lm_coef <- summary(fit_lm)$coefficients
       fit_lm_coef <- data.frame(feature = gsub('`','',rownames(fit_lm_coef)),
                                 pvalue_lm = fit_lm_coef[, 'Pr(>|t|)'])
       df_coef <- dplyr::left_join(df_coef, fit_lm_coef, by = 'feature')
     }
     if(!is.null(output_prefix)){
-      write.table(df_coef, file = paste0(output_prefix, '.tsv'), row.names = F, quote = F, sep = '\t')
+      utils::write.table(df_coef, file = paste0(output_prefix, '.tsv'), row.names = F, quote = F, sep = '\t')
     }
     result <- list(model = fit, coefficient = df_coef)
   } else {

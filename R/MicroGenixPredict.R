@@ -16,24 +16,29 @@
 #' @export
 #'
 #' @importFrom glmnet coef.glmnet
+#' @importFrom stats as.formula
+#' @importFrom stats binomial
+#' @importFrom stats glm
+#' @importFrom stats lm
+#' @importFrom stats predict
+#' @importFrom utils read.csv
+#' @importFrom utils write.table
 #'
 #' @examples
 #' \dontrun{
-#' input_taxa <- system.file('extdata',
-#'     'example_taxon_abundance.csv', package="MicroGenix")
-#' input_geno <- system.file('extdata',
-#'     'example_genotype_dosage.csv', package="MicroGenix")
+#' input_taxa <- system.file('extdata', 'example_taxon_abundance.csv', package="MicroGenix")
+#' input_geno <- system.file('extdata', 'example_genotype_dosage.csv', package="MicroGenix")
 #' model <- 'example_output_model.rds'
 #' predicted_data <- MicroGenixPredict(model, input_taxa, input_geno)
 #' }
 MicroGenixPredict <- function(model, input_taxa, input_geno, observed_expr = NULL,
                             log_trans_taxa = TRUE, log_trans_taxa_add = 0.01,
                             log_trans_gene = FALSE, log_trans_gene_add = 0.01){
-  taxa <- read.csv(input_taxa, check.names = F, row.names = 1)
+  taxa <- utils::read.csv(input_taxa, check.names = F, row.names = 1)
   if(log_trans_taxa){
     taxa <- log2(taxa + log_trans_taxa_add)
   }
-  geno <- read.csv(input_geno, check.names = F, row.names = 1)
+  geno <- utils::read.csv(input_geno, check.names = F, row.names = 1)
 
   sample_names <- intersect(rownames(taxa), rownames(geno))
   num_samples <- length(sample_names)
@@ -65,7 +70,7 @@ MicroGenixPredict <- function(model, input_taxa, input_geno, observed_expr = NUL
   }
   predicted_expr <- predict(fit, newx = x, s="lambda.min")
   if(!is.null(observed_expr)){
-    observed_expr <- read.csv(observed_expr, check.names = F, row.names = 1)
+    observed_expr <- utils::read.csv(observed_expr, check.names = F, row.names = 1)
     if(log_trans_gene){
       observed_expr <- log2(observed_expr + log_trans_gene_add)
     }
